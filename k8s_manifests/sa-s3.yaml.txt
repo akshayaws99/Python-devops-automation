@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: s3-access-sa
+  namespace: monitoring
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::123456789012:role/devops-eks-cluster-s3-access-sa-role
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: s3-client
+  namespace: monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: s3-client
+  template:
+    metadata:
+      labels:
+        app: s3-client
+    spec:
+      serviceAccountName: s3-access-sa
+      containers:
+      - name: s3-client
+        image: amazonlinux:2
+        command: ["/bin/sh", "-c", "yum install -y python3 && python3 -c 'import boto3; s3=boto3.client(\"s3\"); print(s3.list_buckets())'"]
+
+
+#Note: Replace the role-arn annotation with the actual role ARN output from Terraform (aws_iam_role.irsa_role.arn) or use Terraform to render the full manifest.

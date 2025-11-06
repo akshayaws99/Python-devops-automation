@@ -1,0 +1,7 @@
+aws:
+  region: us-east-1
+  default_ami: ami-0abcdef1234567890
+k8s:
+  namespace: dev
+slack:
+  webhook_env_var: SLACK_WEBHOOK_URL

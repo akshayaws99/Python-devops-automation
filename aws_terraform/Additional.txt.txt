@@ -1,0 +1,60 @@
+1. Jenkins AWS Credentials (File not in Terraform – add manually): In Jenkins Dashboard → Manage Jenkins → Credentials → Add:
+Field	Value
+Kind	AWS Credentials
+ID	aws-jenkins-creds
+Access Key	YOUR_AWS_ACCESS_KEY
+Secret Key	YOUR_AWS_SECRET_KEY
+Scope	Global
+
+Then use in Jenkinsfile:
+
+withCredentials([aws(credentialsId: 'aws-jenkins-creds', region: 'us-east-1')]) {
+    sh 'aws s3 ls'
+    sh '. venv/bin/activate && python3 scripts/aws/s3_backup.py'
+}
+
+2. Add to variables.tf (Path: aws_terraform/variables.tf)
+variable "s3_bucket_name" {
+  default = "devops-project-bucket-12345"
+}
+
+variable "admin_aws_account_id" {
+  description = "Root AWS Account ID for EKS cluster admin"
+  default     = "123456789012"
+}
+
+3. Apply Terraform Safely
+cd aws_terraform
+terraform init
+terraform plan
+terraform apply
+
+
+==============================================================
+
+In the eks_cluster.tf make the following changes:
+
+Notes:
+
+private_subnet_ids should be a list of subnet IDs in your VPC.
+
+eks_cluster_name and eks_k8s_version are added to variables.tf.
+
+==============================================================
+
+In the irsa.tf make a note :
+
+This IRSA assume-role condition example uses sub check for a specific service account. The condition in irsa_assume_role must exactly match the service account identity pattern your cluster uses; the example shows using system:serviceaccount:<namespace>:<sa>.
+
+===============================================================
+
+for connecting to eks (after apply) 
+
+After terraform apply, run:
+
+# install awscli & eksctl / ensure aws cli v2 available
+aws eks update-kubeconfig --region <region> --name <eks_cluster_name>
+kubectl get nodes
+
+
+Replace <region> and <eks_cluster_name> with your variables/outputs.

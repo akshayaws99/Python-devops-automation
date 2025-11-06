@@ -1,0 +1,13 @@
+venv/
+.env
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.idea/
+.vscode/
+*.log
+config/*.json
+config/*.pem
+aws_terraform/.terraform/
+aws_terraform/terraform.tfstate*

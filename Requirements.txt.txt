@@ -1,0 +1,8 @@
+boto3
+kubernetes
+requests
+pyyaml
+paramiko
+slack_sdk
+prometheus_client
+python-dotenv

@@ -1,0 +1,10 @@
+✅ Next Steps You Need To Do:
+
+✔ Go to your GitHub repo → Settings → Secrets → Actions
+✔ Add the following secrets:
+
+Secret Name	Purpose
+AWS_ACCESS_KEY_ID	AWS IAM user access key
+AWS_SECRET_ACCESS_KEY	AWS secret key
+S3_BUCKET	Name of your S3 backup bucket
+SLACK_WEBHOOK_URL (optional)	For Slack alerts
